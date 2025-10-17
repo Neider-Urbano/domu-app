@@ -15,6 +15,8 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)/register" />
         <Stack.Screen name="(domu)/home" />
         <Stack.Screen name="(domu)/account" />
+        <Stack.Screen name="(domu)/create-property" />
+        <Stack.Screen name="(domu)/pay-rent" />
         <Stack.Screen name="[...missing]" />
       </Stack>
       <StatusBar style="auto" />

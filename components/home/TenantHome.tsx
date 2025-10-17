@@ -1,5 +1,6 @@
 import { COLORS } from "@/theme/color";
 import { ContratoData, Movimiento } from "@/types/home.type";
+import { router } from "expo-router";
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { CardResumen, CardSmall, MovementsList, QuickActions } from "./shared";
@@ -30,7 +31,9 @@ export default function TenantHome() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.addText}>+ Pagar Ahora</Text>
+        <Text style={styles.addText} onPress={() => router.push("/pay-rent")}>
+          + Pagar Ahora
+        </Text>
 
         <CardResumen title="Mi Contrato Activo" data={contrato} />
 
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     marginBottom: 10,
     fontWeight: "bold",
+    cursor: "pointer",
   },
   row: {
     flexDirection: "row",

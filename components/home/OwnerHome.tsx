@@ -1,5 +1,6 @@
 import { COLORS } from "@/theme/color";
 import { Movimiento, ResumenData } from "@/types/home.type";
+import { router } from "expo-router";
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { CardResumen, CardSmall, MovementsList, QuickActions } from "./shared";
@@ -31,7 +32,12 @@ export default function OwnerHome() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.addText}>+ Agregar Propiedad</Text>
+        <Text
+          style={styles.addText}
+          onPress={() => router.push("/create-property")}
+        >
+          + Agregar Propiedad
+        </Text>
         <CardResumen title="Resumen de Cartera" data={resumen} />
 
         <View style={styles.row}>
@@ -60,6 +66,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     marginBottom: 10,
     fontWeight: "bold",
+    cursor: "pointer",
   },
   row: {
     flexDirection: "row",
