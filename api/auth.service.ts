@@ -17,22 +17,25 @@ export interface LoginData {
   password: string;
 }
 
+export interface User {
+  _id: string;
+  nombre: string;
+  rol: Rol;
+  correo: string;
+}
+
+export interface UserAuth {
+  id: string;
+  rol: Rol;
+  nombre: string;
+  correo: string;
+}
+
 export interface AuthResponse {
   success: boolean;
   message?: string;
   token?: string;
-  user?: {
-    id: string;
-    nombre: string;
-    rol: Rol;
-    correo: string;
-  };
-}
-
-export interface UpdateUserData {
-  id: string;
-  nombre?: string;
-  correo?: string;
+  user?: UserAuth;
 }
 
 export const registerUser = async (
@@ -46,6 +49,7 @@ export const registerUser = async (
         nombre: data.name,
         correo: data.email,
         rol: data.role,
+        contraseña: data.password,
       }),
     });
 
@@ -105,44 +109,6 @@ export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
     return {
       success: false,
       message: "No se pudo conectar al servidor. Verifique su conexión de red.",
-    };
-  }
-};
-
-export const updateUser = async (
-  data: UpdateUserData,
-  token: string
-): Promise<AuthResponse> => {
-  try {
-    const response = await fetch(`${config.BASE_URL}/users/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    const responseData: AuthResponse = await response.json();
-
-    if (!response.ok || !responseData) {
-      return {
-        success: false,
-        message:
-          responseData.message || `Error del servidor: ${response.status}`,
-      };
-    }
-
-    return {
-      success: true,
-      message: "Usuario actualizado correctamente.",
-      user: responseData.user,
-    };
-  } catch (error) {
-    console.error("API Update User Error:", error);
-    return {
-      success: false,
-      message: "No se pudo conectar al servidor.",
     };
   }
 };

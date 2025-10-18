@@ -21,8 +21,6 @@ export default function HomeLayout() {
     return <Redirect href="/(auth)/login" />;
   }
 
-  const initialRoute = "home";
-
   return (
     <Drawer
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -34,39 +32,8 @@ export default function HomeLayout() {
         },
         headerTintColor: "#FFFFFF",
         headerRight: () => <NotificationsButton />,
+        headerTitle: "Domu",
       }}
-      initialRouteName={initialRoute}
-    >
-      <Drawer.Screen
-        name="owner"
-        options={{
-          title: "Inicio (Propietario)",
-          drawerItemStyle: { height: 0 },
-        }}
-      />
-
-      <Drawer.Screen
-        name="tenant"
-        options={{
-          title: "Inicio (Inquilino)",
-          drawerItemStyle: { height: 0 },
-        }}
-      />
-
-      <Drawer.Screen
-        name="account"
-        options={{
-          title: "Mi Cuenta",
-          drawerItemStyle: { height: 0 },
-        }}
-      />
-
-      <Drawer.Screen
-        name="[...missing]"
-        options={{
-          drawerItemStyle: { height: 0 },
-        }}
-      />
-    </Drawer>
+    ></Drawer>
   );
 }

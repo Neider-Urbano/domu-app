@@ -1,4 +1,4 @@
-import { updateUser } from "@/api/auth.service";
+import { updateUser } from "@/api/user.service";
 import { useAuth } from "@/context/AuthContext";
 import { COLORS } from "@/theme/color";
 import { Feather } from "@expo/vector-icons";

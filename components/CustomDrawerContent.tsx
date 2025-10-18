@@ -6,6 +6,7 @@ import {
   DrawerContentScrollView,
   DrawerItem,
 } from "@react-navigation/drawer";
+import { router } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -18,25 +19,25 @@ const drawerItemsPropietario = [
   },
   {
     name: "Mis Inmuebles",
-    path: "owner/propiedades",
+    path: "mis-propiedades",
     icon: Feather,
     iconName: "server",
   },
   {
     name: "Mis Arrendatarios",
-    path: "owner/arrendatarios",
+    path: "home",
     icon: Feather,
     iconName: "users",
   },
   {
     name: "Notificaciones",
-    path: "owner/notificaciones",
+    path: "home",
     icon: Ionicons,
     iconName: "notifications-outline",
   },
   {
     name: "Configuración",
-    path: "owner/configuracion",
+    path: "home",
     icon: Feather,
     iconName: "settings",
   },
@@ -51,25 +52,31 @@ const drawerItemsInquilino = [
   },
   {
     name: "Mi Arriendo",
-    path: "tenant/mi-arriendo",
+    path: "mi-arriendo",
     icon: Feather,
     iconName: "home",
   },
   {
     name: "Realizar Pago",
-    path: "tenant/realizar-pago",
+    path: "pay-rent",
     icon: Feather,
     iconName: "credit-card",
   },
   {
+    name: "Buscar Arriendo",
+    path: "buscar-arriendo",
+    icon: Feather,
+    iconName: "home",
+  },
+  {
     name: "Notificaciones",
-    path: "tenant/notificaciones",
+    path: "home",
     icon: Ionicons,
     iconName: "notifications-outline",
   },
   {
     name: "Configuración",
-    path: "tenant/configuracion",
+    path: "home",
     icon: Feather,
     iconName: "settings",
   },
@@ -111,7 +118,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
         icon={({ color, size }) => (
           <AntDesign name="user" size={size} color={color} />
         )}
-        onPress={() => props.navigation.navigate("account")}
+        onPress={() => router.push("/account")}
       />
 
       {currentRoleItems.map((item) => (
@@ -121,9 +128,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
           icon={({ color, size }) => (
             <item.icon name={item.iconName as any} size={size} color={color} />
           )}
-          onPress={() => {
-            props.navigation.navigate(item.path);
-          }}
+          onPress={() => router.push(`/${item.path}`)}
         />
       ))}
 

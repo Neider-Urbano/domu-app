@@ -1,4 +1,4 @@
-import { Rol } from "@/api/auth.service";
+import { UserAuth } from "@/api/auth.service";
 import React, {
   createContext,
   ReactNode,
@@ -7,30 +7,19 @@ import React, {
   useState,
 } from "react";
 
-interface User {
-  id: string;
-  nombre: string;
-  rol: Rol;
-  correo: string;
-}
-
 interface AuthContextType {
-  user: User | null;
+  user: UserAuth | null;
   token: string | null;
-  login: (token: string, userData: User) => Promise<void>;
+  login: (token: string, userData: UserAuth) => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const saveToken = async (token: string) => {
-  console.log("Token guardado:", token);
-};
+const saveToken = async (token: string) => {};
 
-const removeToken = async () => {
-  console.log("Token eliminado");
-};
+const removeToken = async () => {};
 
 const loadToken = async (): Promise<string | null> => {
   return null;
@@ -41,11 +30,11 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserAuth | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const login = async (newToken: string, userData: User) => {
+  const login = async (newToken: string, userData: UserAuth) => {
     await saveToken(newToken);
     setToken(newToken);
     setUser(userData);
@@ -81,8 +70,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
     throw new Error("useAuth debe ser usado dentro de un AuthProvider");
   }
+
   return context;
 };

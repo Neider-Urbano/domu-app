@@ -11,14 +11,11 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="splash" />
         <Stack.Screen name="welcome" />
-        <Stack.Screen name="(auth)/login" />
-        <Stack.Screen name="(auth)/register" />
-        <Stack.Screen name="(domu)/home" />
-        <Stack.Screen name="(domu)/account" />
-        <Stack.Screen name="(domu)/create-property" />
-        <Stack.Screen name="(domu)/pay-rent" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(domu)" />
         <Stack.Screen name="[...missing]" />
       </Stack>
+
       <StatusBar style="auto" />
       <FlashMessage position="top" />
     </AuthProvider>
