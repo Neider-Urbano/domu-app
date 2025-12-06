@@ -8,8 +8,8 @@ export default function WelcomeScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("@/assets/images/welcome.jpg")}
         style={styles.image}
+        source={require("@/assets/images/welcome.jpg")}
       />
       <Text style={styles.title}>Welcome To DOMU</Text>
       <TouchableOpacity

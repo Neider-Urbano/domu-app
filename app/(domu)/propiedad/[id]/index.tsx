@@ -1,5 +1,9 @@
 import { Rol } from "@/api/auth.service";
-import { getPropiedad, Propiedad } from "@/api/propiedad.service";
+import {
+  deletePropiedad,
+  getPropiedad,
+  Propiedad,
+} from "@/api/propiedad.service";
 import { useAuth } from "@/context/AuthContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -11,13 +15,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { showMessage } from "react-native-flash-message";
 
 export default function DetallePropiedadScreen() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const isInquilino = user?.rol === Rol.INQUILINO;
+  const isPropietario = user?.rol === Rol.PROPIETARIO;
 
   const [propiedad, setPropiedad] = useState<Propiedad | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,6 +31,7 @@ export default function DetallePropiedadScreen() {
   useEffect(() => {
     const fetchPropiedad = async () => {
       if (!id) {
+        setLoading(false);
         return;
       }
 
@@ -39,6 +46,27 @@ export default function DetallePropiedadScreen() {
 
     fetchPropiedad();
   }, [id]);
+
+  const handleDeletePropiedad = async () => {
+    if (!token || !propiedad) return;
+
+    setLoading(true);
+    const res = await deletePropiedad(propiedad._id, token);
+
+    if (res.success) {
+      showMessage({
+        message: "Propiedad eliminada con éxito.",
+        type: "success",
+      });
+      router.replace("/mis-propiedades");
+    } else {
+      showMessage({
+        message: res.message || "Error al eliminar la propiedad.",
+        type: "danger",
+      });
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -115,35 +143,58 @@ export default function DetallePropiedadScreen() {
           </View>
         </View>
 
-        <View style={styles.buttonsContainer}>
+        <View style={styles.actionsWrapper}>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#ccc" }]}
+            style={styles.actionButtonPrimary}
             onPress={() => {
               if (isInquilino) {
-                router.push(`/buscar-arriendo`);
+                // router.push(`/propiedad/${propiedad._id}/galeria-visualizar`);
               } else {
-                router.push(`/mis-propiedades`);
+                router.push(`/propiedad/${propiedad._id}/asignar-inquilino`);
               }
             }}
           >
-            <Text style={styles.buttonText}>Volver</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#2E3B59" }]}
-            onPress={() => {
-              if (isInquilino) {
-              } else {
-                router.navigate(
-                  `/propiedad/${propiedad._id}/asignar-inquilino`
-                );
-              }
-            }}
-          >
-            <Text style={styles.buttonTextContact}>
-              {isInquilino ? "Ver Galeria de Fotos" : "Asignar Inquilino"}
+            <Text style={styles.primaryButtonText}>
+              {isInquilino ? "Ver Galería" : "Asignar Inquilino"}
             </Text>
           </TouchableOpacity>
+
+          <View style={styles.secondaryRow}>
+            <TouchableOpacity
+              style={styles.secondaryButton}
+              onPress={() => {
+                if (isInquilino) {
+                  router.push(`/buscar-arriendo`);
+                } else {
+                  router.push(`/mis-propiedades`);
+                }
+              }}
+            >
+              <Text style={styles.secondaryButtonText}>Volver</Text>
+            </TouchableOpacity>
+
+            {isPropietario && (
+              <TouchableOpacity
+                style={[styles.secondaryButton, styles.galleryButton]}
+                onPress={() => {
+                  // router.navigate(
+                  //   `/propiedad/${propiedad._id}/galeria-gestion`
+                  // );
+                }}
+              >
+                <Text style={styles.galleryButtonText}>Galería</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {isPropietario && (
+            <TouchableOpacity
+              style={styles.deleteButtonNew}
+              onPress={handleDeletePropiedad}
+            >
+              <Text style={styles.deleteButtonNewText}>Eliminar Propiedad</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -195,9 +246,8 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 12,
   },
-  infoContainer: {
-    width: "100%",
-  },
+  infoContainer: { width: "100%" },
+
   row: {
     gap: 10,
     marginBottom: 12,
@@ -219,9 +269,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
   },
-  details: {
-    width: "100%",
-  },
+
+  details: { width: "100%" },
   label: {
     fontSize: 13,
     color: "#777",
@@ -236,25 +285,56 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 25,
+  actionsWrapper: {
     width: "100%",
+    marginTop: 25,
+    gap: 12,
   },
-  button: {
+  actionButtonPrimary: {
+    backgroundColor: "#2E3B59",
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  primaryButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  secondaryRow: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  secondaryButton: {
     flex: 1,
-    paddingVertical: 10,
-    marginHorizontal: 6,
+    backgroundColor: "#D1D1D1",
+    paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
   },
-  buttonText: {
+  secondaryButtonText: {
+    color: "#333",
+    fontSize: 14,
     fontWeight: "600",
   },
-  buttonTextContact: {
-    fontWeight: "600",
+  galleryButton: {
+    backgroundColor: "#2E3B59",
+  },
+  galleryButtonText: {
     color: "#fff",
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  deleteButtonNew: {
+    backgroundColor: "#FF4D4D",
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  deleteButtonNewText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 15,
   },
   center: {
     flex: 1,

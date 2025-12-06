@@ -1,8 +1,8 @@
 import { listMyProperties, Propiedad } from "@/api/propiedad.service";
 import { useAuth } from "@/context/AuthContext";
 import { COLORS } from "@/theme/color";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -19,11 +19,13 @@ export default function MisPropiedadesScreen() {
   const [propiedades, setPropiedades] = useState<Propiedad[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchPropiedades = async () => {
+  const fetchPropiedades = useCallback(async () => {
     if (!token) {
+      setLoading(false);
       return;
     }
 
+    setLoading(true);
     const res = await listMyProperties(token);
 
     if (res.success && res.data) {
@@ -31,11 +33,13 @@ export default function MisPropiedadesScreen() {
     }
 
     setLoading(false);
-  };
+  }, [token]);
 
-  useEffect(() => {
-    fetchPropiedades();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPropiedades();
+    }, [fetchPropiedades])
+  );
 
   const renderItem = ({ item }: { item: Propiedad }) => (
     <TouchableOpacity

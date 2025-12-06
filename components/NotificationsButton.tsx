@@ -44,16 +44,30 @@ export const NotificationsButton = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Notificaciones</Text>
-            <FlatList
-              data={mockNotifications}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View style={styles.notificationItem}>
-                  <Text style={styles.title}>{item.title}</Text>
-                  <Text style={styles.message}>{item.message}</Text>
-                </View>
-              )}
-            />
+
+            {mockNotifications.length === 0 ? (
+              <FlatList
+                data={mockNotifications}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <View style={styles.notificationItem}>
+                    <Text style={styles.title}>{item.title}</Text>
+                    <Text style={styles.message}>{item.message}</Text>
+                  </View>
+                )}
+              />
+            ) : (
+              <View style={styles.emptyContainer}>
+                <Ionicons
+                  name="notifications-off-outline"
+                  size={50}
+                  color="#ccc"
+                />
+                <Text style={styles.emptyText}>
+                  No tienes notificaciones por ahora.
+                </Text>
+              </View>
+            )}
 
             <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
               <Text style={{ color: "#fff", textAlign: "center" }}>Cerrar</Text>
@@ -100,5 +114,16 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     padding: 12,
     borderRadius: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 50,
+  },
+  emptyText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#999",
   },
 });

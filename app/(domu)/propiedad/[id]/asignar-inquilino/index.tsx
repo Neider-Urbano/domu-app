@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   addButton: {
-    width: "50%",
+    width: "47%",
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   backButton: {
-    width: "50%",
+    width: "47%",
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 12,
@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   btnsAction: {
-    gap: "30px",
     display: "flex",
     flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

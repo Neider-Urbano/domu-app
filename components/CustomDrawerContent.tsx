@@ -31,13 +31,13 @@ const drawerItemsPropietario = [
   },
   {
     name: "Notificaciones",
-    path: "home",
+    path: "notifications",
     icon: Ionicons,
     iconName: "notifications-outline",
   },
   {
     name: "Configuración",
-    path: "home",
+    path: "settings",
     icon: Feather,
     iconName: "settings",
   },
@@ -70,13 +70,13 @@ const drawerItemsInquilino = [
   },
   {
     name: "Notificaciones",
-    path: "home",
+    path: "notifications",
     icon: Ionicons,
     iconName: "notifications-outline",
   },
   {
     name: "Configuración",
-    path: "home",
+    path: "settings",
     icon: Feather,
     iconName: "settings",
   },

@@ -73,6 +73,9 @@ export default function CrearContratoScreen() {
         type: "success",
       });
 
+      setDuracion(12);
+      setCondiciones("");
+
       router.push(`/propiedad/${idPropiedad}`);
     } else {
       showMessage({
